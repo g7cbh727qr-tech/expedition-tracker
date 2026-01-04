@@ -274,6 +274,8 @@
 
   <script>
     const GOAL = 5000000;
+    const DAILY_TARGET = 70000;
+const START_DATE = new Date("2026-01-04T00:00:00"); // adjust if needed
     const TARGET_DATE = new Date("2026-02-18T00:00:00");
 
     const balanceInput = document.getElementById("balanceInput");
@@ -320,6 +322,7 @@
 
       progressCard.style.display = "block";
       barFill.style.width = pctClamped.toFixed(2) + "%";
+      barFill.style.background = milestoneColor(balance);
       progressPct.textContent = pctClamped.toFixed(2) + "%";
 
       const remaining = GOAL - balance;
@@ -331,7 +334,31 @@ document.getElementById("nextMillion").textContent =
     ? "All milestones cleared 🎉"
     : `To next SKill Point: ${formatCurrency(toNext)}`;
     }
+function milestoneColor(balance) {
+  if (balance < 1_000_000) return "#55B686";
+  if (balance < 2_000_000) return "#F2C14B";
+  if (balance < 3_000_000) return "#F29E4C";
+  if (balance < 4_000_000) return "#E26D5A";
+  return "#C44536";
+}
 
+function nextMillionAmount(balance) {
+  if (balance >= GOAL) return 0;
+  const nextMilestone = Math.ceil(balance / 1_000_000) * 1_000_000;
+  return Math.max(0, nextMilestone - balance);
+}
+    function expectedByNow() {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const start = new Date(START_DATE);
+  start.setHours(0,0,0,0);
+
+  if (today <= start) return 0;
+
+  const daysElapsed = Math.floor((today - start) / (1000*60*60*24)) + 1;
+  return daysElapsed * DAILY_TARGET;
+}
     function update() {
       const balance = parseBalance();
       localStorage.setItem("balance", String(balance));
@@ -365,6 +392,28 @@ document.getElementById("nextMillion").textContent =
 </div>
       `;
     }
+    const expected = expectedByNow();
+const delta = balance - expected;
+
+let scheduleText = "";
+let scheduleColor = "";
+
+if (Math.abs(delta) < DAILY_TARGET * 0.25) {
+  scheduleText = "On track";
+  scheduleColor = "#94a3b8";
+} else if (delta > 0) {
+  scheduleText = `Ahead of schedule by ${formatCurrency(delta)}`;
+  scheduleColor = "#55B686";
+} else {
+  scheduleText = `Behind schedule by ${formatCurrency(Math.abs(delta))}`;
+  scheduleColor = "#E26D5A";
+}
+
+resultsEl.innerHTML += `
+  <div style="margin-top:6px; color:${scheduleColor}; font-weight:600;">
+    ${scheduleText}
+  </div>
+`;
 
     function resetTracker() {
       localStorage.removeItem("balance");
