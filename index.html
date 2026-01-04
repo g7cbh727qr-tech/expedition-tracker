@@ -291,8 +291,6 @@
         minimumFractionDigits: 2
       });
     }
-    const DAILY_TARGET = 70000;
-const START_DATE = new Date("2026-01-04T00:00:00"); // adjust if needed
 
     function parseBalance() {
       const n = Number(balanceInput.value);
@@ -322,7 +320,6 @@ const START_DATE = new Date("2026-01-04T00:00:00"); // adjust if needed
 
       progressCard.style.display = "block";
       barFill.style.width = pctClamped.toFixed(2) + "%";
-      barFill.style.background = milestoneColor(balance);
       progressPct.textContent = pctClamped.toFixed(2) + "%";
 
       const remaining = GOAL - balance;
@@ -334,18 +331,7 @@ document.getElementById("nextMillion").textContent =
     ? "All milestones cleared 🎉"
     : `To next SKill Point: ${formatCurrency(toNext)}`;
     }
-function expectedByNow() {
-  const today = new Date();
-  today.setHours(0,0,0,0);
 
-  const start = new Date(START_DATE);
-  start.setHours(0,0,0,0);
-
-  if (today <= start) return 0;
-
-  const daysElapsed = Math.floor((today - start) / (1000*60*60*24)) + 1;
-  return daysElapsed * DAILY_TARGET;
-}
     function update() {
       const balance = parseBalance();
       localStorage.setItem("balance", String(balance));
@@ -378,28 +364,6 @@ function expectedByNow() {
   <span class="needed">${formatCurrency(perDay)}</span>
 </div>
       `;
-      const expected = expectedByNow();
-const delta = balance - expected;
-
-let scheduleText = "";
-let scheduleColor = "";
-
-if (Math.abs(delta) < DAILY_TARGET * 0.25) {
-  scheduleText = "On track";
-  scheduleColor = "#94a3b8";
-} else if (delta > 0) {
-  scheduleText = `Ahead of schedule by ${formatCurrency(delta)}`;
-  scheduleColor = "#55B686";
-} else {
-  scheduleText = `Behind schedule by ${formatCurrency(Math.abs(delta))}`;
-  scheduleColor = "#E26D5A";
-}
-
-resultsEl.innerHTML += `
-  <div style="margin-top:6px; color:${scheduleColor}; font-weight:600;">
-    ${scheduleText}
-  </div>
-`;
     }
 
     function resetTracker() {
@@ -416,25 +380,7 @@ resultsEl.innerHTML += `
   const nextMilestone = Math.ceil(balance / 1_000_000) * 1_000_000;
   return Math.max(0, nextMilestone - balance);
 }
-    function milestoneColor(balance) {
-  if (balance < 1_000_000) return "#55B686";   // green
-  if (balance < 2_000_000) return "#F2C14B";   // gold
-  if (balance < 3_000_000) return "#F29E4C";   // orange
-  if (balance < 4_000_000) return "#E26D5A";   // warm red
-  return "#C44536";                            // final push
-}
 
-    function expectedByNow() {
-  const today = new Date();
-  today.setHours(0,0,0,0);
-
-  const start = new Date(START_DATE);
-  start.setHours(0,0,0,0);
-
-  if (today <= start) return 0;
-
-  const daysElapsed = Math.floor((today - start) / (1000*60*60*24)) + 1;
-  return daysElapsed * DAILY_TARGET;
     // Buttons
     document.getElementById("updateBtn").addEventListener("click", update);
     document.getElementById("resetBtn").addEventListener("click", resetTracker);
