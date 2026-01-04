@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-  
-<link rel="apple-touch-icon" sizes="180x180" href="/expedition-tracker/apple-touch-icon.png?v=2">
-<link rel="apple-touch-icon" sizes="167x167" href="/expedition-tracker/apple-touch-icon-167x167.png?v=2">
-<link rel="apple-touch-icon" sizes="152x152" href="/expedition-tracker/apple-touch-icon-152x152.png?v=2">
+  <!-- App Icons (GitHub Pages repo path) -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/expedition-tracker/apple-touch-icon.png?v=2">
+  <link rel="apple-touch-icon" sizes="167x167" href="/expedition-tracker/apple-touch-icon-167x167.png?v=2">
+  <link rel="apple-touch-icon" sizes="152x152" href="/expedition-tracker/apple-touch-icon-152x152.png?v=2">
 
-<link rel="icon" type="image/png" sizes="192x192" href="/expedition-tracker/icon-192.png?v=2">
-<link rel="icon" type="image/png" sizes="512x512" href="/expedition-tracker/icon-512.png?v=2">
+  <link rel="icon" type="image/png" sizes="192x192" href="/expedition-tracker/icon-192.png?v=2">
+  <link rel="icon" type="image/png" sizes="512x512" href="/expedition-tracker/icon-512.png?v=2">
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Expedition Tracker</title>
+
   <style>
     :root{
       --bg: #0b1220;
@@ -24,37 +24,30 @@
       --secondary: #334155;
     }
 
-    .needed {
-  color: #F2C14B; /* rgb(242, 193, 75) */
-}
-
-    .remaining {
-  color: #E26D5A; /* warm red from same palette */
-}
+    .needed { color: #F2C14B; }     /* rgb(242, 193, 75) */
+    .remaining { color: #E26D5A; }  /* warm red */
 
     /* Progress milestones */
-.milestones {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
+    .milestones {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .milestone {
+      position: absolute;
+      top: -6px;
+      width: 2px;
+      height: 26px;
+      background: rgba(148,163,184,.45);
+    }
+    .milestoneLabel {
+      position: absolute;
+      top: 22px;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: #94a3b8;
+    }
 
-.milestone {
-  position: absolute;
-  top: -6px;
-  width: 2px;
-  height: 26px;
-  background: rgba(148,163,184,.45);
-}
-
-.milestoneLabel {
-  position: absolute;
-  top: 22px;
-  transform: translateX(-50%);
-  font-size: 11px;
-  color: #94a3b8;
-}
-    
     * { box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -144,11 +137,15 @@
       touch-action: manipulation;
     }
     .primary {
-  background: #55B686; /* rgb(85, 182, 134) */
-  color: #0b1220;
-  border-color: transparent;
-}
-    .secondary { background: var(--secondary); color: white; border-color: transparent; }
+      background: #55B686; /* rgb(85, 182, 134) */
+      color: #0b1220;
+      border-color: transparent;
+    }
+    .secondary {
+      background: var(--secondary);
+      color: white;
+      border-color: transparent;
+    }
 
     .results {
       display: grid;
@@ -192,6 +189,7 @@
       border-radius: 999px;
       overflow: hidden;
       border: 1px solid var(--line);
+      position: relative;
     }
     .barFill {
       height: 100%;
@@ -210,7 +208,6 @@
       flex-wrap: wrap;
     }
 
-    /* Mobile tweaks */
     @media (max-width: 420px) {
       h1 { font-size: 24px; }
       .btnRow { grid-template-columns: 1fr; }
@@ -219,6 +216,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <header>
@@ -245,26 +243,27 @@
           <div style="font-weight:650;">Progress</div>
           <div class="pct" id="progressPct">0%</div>
         </div>
-        <div class="barTrack" aria-label="Progress toward goal" style="position: relative;">
-  <div class="barFill" id="barFill"></div>
 
-  <div class="milestones">
-    <div class="milestone" style="left:20%"></div>
-    <div class="milestone" style="left:40%"></div>
-    <div class="milestone" style="left:60%"></div>
-    <div class="milestone" style="left:80%"></div>
+        <div class="barTrack" aria-label="Progress toward goal">
+          <div class="barFill" id="barFill"></div>
 
-    <div class="milestoneLabel" style="left:20%">1M</div>
-    <div class="milestoneLabel" style="left:40%">2M</div>
-    <div class="milestoneLabel" style="left:60%">3M</div>
-    <div class="milestoneLabel" style="left:80%">4M</div>
-  </div>
-</div>
+          <div class="milestones">
+            <div class="milestone" style="left:20%"></div>
+            <div class="milestone" style="left:40%"></div>
+            <div class="milestone" style="left:60%"></div>
+            <div class="milestone" style="left:80%"></div>
+
+            <div class="milestoneLabel" style="left:20%">1M</div>
+            <div class="milestoneLabel" style="left:40%">2M</div>
+            <div class="milestoneLabel" style="left:60%">3M</div>
+            <div class="milestoneLabel" style="left:80%">4M</div>
+          </div>
         </div>
+
         <div class="progressFoot">
           <div id="progressDollars">$0.00 of $5,000,000.00</div>
           <div id="progressRemaining">Remaining: $0.00</div>
-<div id="nextMillion">To next SKill Point: $0.00</div>
+          <div id="nextMillion">To next SKill Point: $0.00</div>
         </div>
       </div>
 
@@ -275,7 +274,7 @@
   <script>
     const GOAL = 5000000;
     const DAILY_TARGET = 70000;
-const START_DATE = new Date("2026-01-04T00:00:00"); // adjust if needed
+    const START_DATE = new Date("2026-01-04T00:00:00"); // change if your tracking start date is different
     const TARGET_DATE = new Date("2026-02-18T00:00:00");
 
     const balanceInput = document.getElementById("balanceInput");
@@ -285,6 +284,7 @@ const START_DATE = new Date("2026-01-04T00:00:00"); // adjust if needed
     const progressPct = document.getElementById("progressPct");
     const progressDollars = document.getElementById("progressDollars");
     const progressRemaining = document.getElementById("progressRemaining");
+    const nextMillionEl = document.getElementById("nextMillion");
 
     function formatCurrency(num) {
       return num.toLocaleString("en-US", {
@@ -308,12 +308,39 @@ const START_DATE = new Date("2026-01-04T00:00:00"); // adjust if needed
 
       const diffMs = target - today;
       if (diffMs < 0) return 0;
-
       return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
     }
 
     function clamp(val, min, max) {
       return Math.max(min, Math.min(max, val));
+    }
+
+    // Bar color changes by milestone (same palette vibe)
+    function milestoneColor(balance) {
+      if (balance < 1_000_000) return "#55B686";  // green
+      if (balance < 2_000_000) return "#F2C14B";  // gold
+      if (balance < 3_000_000) return "#F29E4C";  // orange
+      if (balance < 4_000_000) return "#E26D5A";  // warm red
+      return "#C44536";                           // final push red
+    }
+
+    function nextMillionAmount(balance) {
+      if (balance >= GOAL) return 0;
+      const nextMilestone = Math.ceil(balance / 1_000_000) * 1_000_000;
+      return Math.max(0, nextMilestone - balance);
+    }
+
+    function expectedByNow() {
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      const start = new Date(START_DATE);
+      start.setHours(0,0,0,0);
+
+      if (today < start) return 0;
+
+      const daysElapsed = Math.floor((today - start) / (1000*60*60*24)) + 1; // inclusive
+      return daysElapsed * DAILY_TARGET;
     }
 
     function updateProgress(balance) {
@@ -328,37 +355,14 @@ const START_DATE = new Date("2026-01-04T00:00:00"); // adjust if needed
       const remaining = GOAL - balance;
       progressDollars.textContent = `${formatCurrency(balance)} of ${formatCurrency(GOAL)}`;
       progressRemaining.textContent = `Remaining: ${formatCurrency(Math.max(0, remaining))}`;
+
       const toNext = nextMillionAmount(balance);
-document.getElementById("nextMillion").textContent =
-  balance >= GOAL
-    ? "All milestones cleared 🎉"
-    : `To next SKill Point: ${formatCurrency(toNext)}`;
+      nextMillionEl.textContent =
+        balance >= GOAL
+          ? "All milestones cleared 🎉"
+          : `To next SKill Point: ${formatCurrency(toNext)}`;
     }
-function milestoneColor(balance) {
-  if (balance < 1_000_000) return "#55B686";
-  if (balance < 2_000_000) return "#F2C14B";
-  if (balance < 3_000_000) return "#F29E4C";
-  if (balance < 4_000_000) return "#E26D5A";
-  return "#C44536";
-}
 
-function nextMillionAmount(balance) {
-  if (balance >= GOAL) return 0;
-  const nextMilestone = Math.ceil(balance / 1_000_000) * 1_000_000;
-  return Math.max(0, nextMilestone - balance);
-}
-    function expectedByNow() {
-  const today = new Date();
-  today.setHours(0,0,0,0);
-
-  const start = new Date(START_DATE);
-  start.setHours(0,0,0,0);
-
-  if (today <= start) return 0;
-
-  const daysElapsed = Math.floor((today - start) / (1000*60*60*24)) + 1;
-  return daysElapsed * DAILY_TARGET;
-}
     function update() {
       const balance = parseBalance();
       localStorage.setItem("balance", String(balance));
@@ -382,38 +386,42 @@ function nextMillionAmount(balance) {
 
       resultsEl.innerHTML = `
         <div class="row"><span>Days left</span><strong>${daysLeft}</strong></div>
+
         <div class="row">
-  <span>Remaining For 5 Skill Points</span>
-  <strong class="remaining">${formatCurrency(remaining)}</strong>
-</div>
+          <span>Remaining For 5 Skill Points</span>
+          <strong class="remaining">${formatCurrency(remaining)}</strong>
+        </div>
+
         <div class="big">
-  Needed per day:
-  <span class="needed">${formatCurrency(perDay)}</span>
-</div>
+          Needed per day:
+          <span class="needed">${formatCurrency(perDay)}</span>
+        </div>
+      `;
+
+      // Ahead / Behind schedule toward 5M, based on DAILY_TARGET
+      const expected = expectedByNow();
+      const delta = balance - expected;
+
+      let scheduleText = "";
+      let scheduleColor = "";
+
+      if (Math.abs(delta) < DAILY_TARGET * 0.25) {
+        scheduleText = "On track";
+        scheduleColor = "#94a3b8";
+      } else if (delta > 0) {
+        scheduleText = `Ahead of schedule by ${formatCurrency(delta)}`;
+        scheduleColor = "#55B686";
+      } else {
+        scheduleText = `Behind schedule by ${formatCurrency(Math.abs(delta))}`;
+        scheduleColor = "#E26D5A";
+      }
+
+      resultsEl.innerHTML += `
+        <div style="margin-top:6px; color:${scheduleColor}; font-weight:600;">
+          ${scheduleText} (at ${formatCurrency(DAILY_TARGET)}/day)
+        </div>
       `;
     }
-    const expected = expectedByNow();
-const delta = balance - expected;
-
-let scheduleText = "";
-let scheduleColor = "";
-
-if (Math.abs(delta) < DAILY_TARGET * 0.25) {
-  scheduleText = "On track";
-  scheduleColor = "#94a3b8";
-} else if (delta > 0) {
-  scheduleText = `Ahead of schedule by ${formatCurrency(delta)}`;
-  scheduleColor = "#55B686";
-} else {
-  scheduleText = `Behind schedule by ${formatCurrency(Math.abs(delta))}`;
-  scheduleColor = "#E26D5A";
-}
-
-resultsEl.innerHTML += `
-  <div style="margin-top:6px; color:${scheduleColor}; font-weight:600;">
-    ${scheduleText}
-  </div>
-`;
 
     function resetTracker() {
       localStorage.removeItem("balance");
@@ -422,19 +430,14 @@ resultsEl.innerHTML += `
       progressCard.style.display = "none";
       barFill.style.width = "0%";
       progressPct.textContent = "0%";
+      nextMillionEl.textContent = "To next SKill Point: $0.00";
     }
-
-    function nextMillionAmount(balance) {
-  if (balance >= GOAL) return 0;
-  const nextMilestone = Math.ceil(balance / 1_000_000) * 1_000_000;
-  return Math.max(0, nextMilestone - balance);
-}
 
     // Buttons
     document.getElementById("updateBtn").addEventListener("click", update);
     document.getElementById("resetBtn").addEventListener("click", resetTracker);
 
-    // Enter to update (useful on desktop + mobile keyboards)
+    // Enter to update
     balanceInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") update();
     });
