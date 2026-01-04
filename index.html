@@ -32,6 +32,9 @@
       --secondary: #334155;
     }
 
+    .needed {
+  color: #F2C14B; /* rgb(242, 193, 75) */
+}
     * { box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -314,7 +317,10 @@
       resultsEl.innerHTML = `
         <div class="row"><span>Days left</span><strong>${daysLeft}</strong></div>
         <div class="row"><span>Remaining</span><strong>${formatCurrency(remaining)}</strong></div>
-        <div class="big">Needed per day: ${formatCurrency(perDay)}</div>
+        <div class="big">
+  Needed per day:
+  <span class="needed">${formatCurrency(perDay)}</span>
+</div>
       `;
     }
 
