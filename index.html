@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Expedition Tracker</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 24px;
+    }
+    .container {
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #94a3b8;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: #020617;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    label {
+      font-size: 14px;
+      color: #94a3b8;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      margin-top: 12px;
+      cursor: pointer;
+    }
+    .primary {
+      background: #2563eb;
+      color: white;
+    }
+    .secondary {
+      background: #334155;
+      color: white;
+    }
+    .results div {
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    .big {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Expedition Tracker</h1>
+    <div class="subtitle">
+      Goal: $5,000,000 · Target: Feb 18, 2026
+    </div>
+
+    <div class="card">
+      <label>Current balance</label>
+      <input id="balanceInput" type="number" placeholder="Enter current balance" />
+      <button class="primary" onclick="update()">Update</button>
+      <button class="secondary" onclick="resetTracker()">Reset</button>
+    </div>
+
+    <div class="card results" id="results"></div>
+  </div>
+
+  <script>
+    const GOAL = 5000000;
+    const TARGET_DATE = new Date("2026-02-18T00:00:00");
+
+    function formatCurrency(num) {
+      return num.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 2
+      });
+    }
+
+    function computeDaysLeftInclusive() {
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const diffMs = TARGET_DATE - today;
+      if (diffMs < 0) return 0;
+      return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
+    }
+
+    function update() {
+      const balance = Number(document.getElementById("balanceInput").value) || 0;
+      localStorage.setItem("balance", balance);
+
+      const daysLeft = computeDaysLeftInclusive();
+      const remaining = GOAL - balance;
+      const results = document.getElementById("results");
+
+      if (remaining <= 0) {
+        results.innerHTML = `<div class="big">🎉 Goal hit</div>`;
+        return;
+      }
+
+      if (daysLeft === 0) {
+        results.innerHTML = `<div class="big">Past target date</div>`;
+        return;
+      }
+
+      const perDay = remaining / daysLeft;
+
+      results.innerHTML = `
+        <div>Days left: <strong>${daysLeft}</strong></div>
+        <div>Remaining: <strong>${formatCurrency(remaining)}</strong></div>
+        <div class="big">Needed per day: ${formatCurrency(perDay)}</div>
+      `;
+    }
+
+    function resetTracker() {
+      localStorage.removeItem("balance");
+      document.getElementById("balanceInput").value = "";
+      document.getElementById("results").innerHTML = "";
+    }
+
+    // Load saved balance on open
+    const saved = localStorage.getItem("balance");
+    if (saved !== null) {
+      document.getElementById("balanceInput").value = saved;
+      update();
+    }
+  </script>
+</body>
+</html>
