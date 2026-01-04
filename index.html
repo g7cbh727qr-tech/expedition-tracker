@@ -2,96 +2,229 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Expedition Tracker</title>
   <style>
+    :root{
+      --bg: #0b1220;
+      --card: #0a0f1c;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --line: rgba(148,163,184,.18);
+      --primary: #2563eb;
+      --secondary: #334155;
+    }
+
+    * { box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
+      background: var(--bg);
+      color: var(--text);
       margin: 0;
-      padding: 24px;
+      padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+
     .container {
-      max-width: 420px;
+      max-width: 520px;
       margin: 0 auto;
+      padding: 18px 0 28px;
     }
-    h1 {
+
+    header {
       text-align: center;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 6px 0 6px;
+      font-size: 26px;
+      letter-spacing: 0.2px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
       margin-bottom: 8px;
     }
-    .subtitle {
-      text-align: center;
-      font-size: 14px;
-      color: #94a3b8;
-      margin-bottom: 24px;
+
+    .inputWrap {
+      display: flex;
+      gap: 10px;
+      align-items: center;
     }
-    .card {
-      background: #020617;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 16px;
-    }
-    label {
-      font-size: 14px;
-      color: #94a3b8;
-    }
+
     input {
       width: 100%;
-      padding: 12px;
+      padding: 14px 14px;
       font-size: 18px;
-      margin-top: 6px;
-      border-radius: 8px;
-      border: none;
+      border-radius: 12px;
+      border: 1px solid var(--line);
       outline: none;
+      background: rgba(255,255,255,.03);
+      color: var(--text);
     }
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
+
+    input::placeholder { color: rgba(148,163,184,.6); }
+
+    .btnRow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
       margin-top: 12px;
+    }
+
+    button {
+      padding: 14px 14px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
       cursor: pointer;
+      touch-action: manipulation;
     }
-    .primary {
-      background: #2563eb;
-      color: white;
-    }
-    .secondary {
-      background: #334155;
-      color: white;
-    }
-    .results div {
-      margin-bottom: 8px;
+    .primary { background: var(--primary); color: white; border-color: transparent; }
+    .secondary { background: var(--secondary); color: white; border-color: transparent; }
+
+    .results {
+      display: grid;
+      gap: 10px;
       font-size: 16px;
     }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .row span { color: var(--muted); }
+    .row strong { font-weight: 650; }
+
     .big {
       font-size: 20px;
-      font-weight: 600;
+      font-weight: 750;
+      letter-spacing: 0.2px;
+      margin-top: 2px;
+    }
+
+    /* Progress bar */
+    .progressHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .progressHeader .pct {
+      font-size: 14px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .barTrack {
+      width: 100%;
+      height: 14px;
+      background: rgba(148,163,184,.16);
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    .barFill {
+      height: 100%;
+      width: 0%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width .35s ease;
+    }
+    .progressFoot {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 420px) {
+      h1 { font-size: 24px; }
+      .btnRow { grid-template-columns: 1fr; }
+      input { font-size: 17px; }
+      .big { font-size: 19px; }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Expedition Tracker</h1>
-    <div class="subtitle">
-      Goal: $5,000,000 · Target: Feb 18, 2026
-    </div>
+    <header>
+      <h1>Expedition Tracker</h1>
+      <div class="subtitle">
+        Goal: $5,000,000 · Target: Feb 18, 2026
+      </div>
+    </header>
 
-    <div class="card">
-      <label>Current balance</label>
-      <input id="balanceInput" type="number" placeholder="Enter current balance" />
-      <button class="primary" onclick="update()">Update</button>
-      <button class="secondary" onclick="resetTracker()">Reset</button>
-    </div>
+    <div class="grid">
+      <div class="card">
+        <label for="balanceInput">Current balance</label>
+        <div class="inputWrap">
+          <input id="balanceInput" inputmode="decimal" type="number" min="0" step="0.01" placeholder="Enter current balance" />
+        </div>
+        <div class="btnRow">
+          <button class="primary" id="updateBtn" type="button">Update</button>
+          <button class="secondary" id="resetBtn" type="button">Reset</button>
+        </div>
+      </div>
 
-    <div class="card results" id="results"></div>
+      <div class="card" id="progressCard" style="display:none;">
+        <div class="progressHeader">
+          <div style="font-weight:650;">Progress</div>
+          <div class="pct" id="progressPct">0%</div>
+        </div>
+        <div class="barTrack" aria-label="Progress toward goal">
+          <div class="barFill" id="barFill"></div>
+        </div>
+        <div class="progressFoot">
+          <div id="progressDollars">$0.00 of $5,000,000.00</div>
+          <div id="progressRemaining">Remaining: $0.00</div>
+        </div>
+      </div>
+
+      <div class="card results" id="results"></div>
+    </div>
   </div>
 
   <script>
     const GOAL = 5000000;
     const TARGET_DATE = new Date("2026-02-18T00:00:00");
+
+    const balanceInput = document.getElementById("balanceInput");
+    const resultsEl = document.getElementById("results");
+    const progressCard = document.getElementById("progressCard");
+    const barFill = document.getElementById("barFill");
+    const progressPct = document.getElementById("progressPct");
+    const progressDollars = document.getElementById("progressDollars");
+    const progressRemaining = document.getElementById("progressRemaining");
 
     function formatCurrency(num) {
       return num.toLocaleString("en-US", {
@@ -101,51 +234,91 @@
       });
     }
 
+    function parseBalance() {
+      const n = Number(balanceInput.value);
+      return Number.isFinite(n) && n >= 0 ? n : 0;
+    }
+
     function computeDaysLeftInclusive() {
       const today = new Date();
       today.setHours(0,0,0,0);
-      const diffMs = TARGET_DATE - today;
+
+      const target = new Date(TARGET_DATE);
+      target.setHours(0,0,0,0);
+
+      const diffMs = target - today;
       if (diffMs < 0) return 0;
+
       return Math.floor(diffMs / (1000 * 60 * 60 * 24)) + 1;
     }
 
+    function clamp(val, min, max) {
+      return Math.max(min, Math.min(max, val));
+    }
+
+    function updateProgress(balance) {
+      const pct = GOAL <= 0 ? 0 : (balance / GOAL) * 100;
+      const pctClamped = clamp(pct, 0, 100);
+
+      progressCard.style.display = "block";
+      barFill.style.width = pctClamped.toFixed(2) + "%";
+      progressPct.textContent = pctClamped.toFixed(2) + "%";
+
+      const remaining = GOAL - balance;
+      progressDollars.textContent = `${formatCurrency(balance)} of ${formatCurrency(GOAL)}`;
+      progressRemaining.textContent = `Remaining: ${formatCurrency(Math.max(0, remaining))}`;
+    }
+
     function update() {
-      const balance = Number(document.getElementById("balanceInput").value) || 0;
-      localStorage.setItem("balance", balance);
+      const balance = parseBalance();
+      localStorage.setItem("balance", String(balance));
 
       const daysLeft = computeDaysLeftInclusive();
       const remaining = GOAL - balance;
-      const results = document.getElementById("results");
+
+      updateProgress(balance);
 
       if (remaining <= 0) {
-        results.innerHTML = `<div class="big">🎉 Goal hit</div>`;
+        resultsEl.innerHTML = `<div class="big">🎉 Goal hit</div>`;
         return;
       }
 
       if (daysLeft === 0) {
-        results.innerHTML = `<div class="big">Past target date</div>`;
+        resultsEl.innerHTML = `<div class="big">Past target date</div>`;
         return;
       }
 
       const perDay = remaining / daysLeft;
 
-      results.innerHTML = `
-        <div>Days left: <strong>${daysLeft}</strong></div>
-        <div>Remaining: <strong>${formatCurrency(remaining)}</strong></div>
+      resultsEl.innerHTML = `
+        <div class="row"><span>Days left</span><strong>${daysLeft}</strong></div>
+        <div class="row"><span>Remaining</span><strong>${formatCurrency(remaining)}</strong></div>
         <div class="big">Needed per day: ${formatCurrency(perDay)}</div>
       `;
     }
 
     function resetTracker() {
       localStorage.removeItem("balance");
-      document.getElementById("balanceInput").value = "";
-      document.getElementById("results").innerHTML = "";
+      balanceInput.value = "";
+      resultsEl.innerHTML = "";
+      progressCard.style.display = "none";
+      barFill.style.width = "0%";
+      progressPct.textContent = "0%";
     }
+
+    // Buttons
+    document.getElementById("updateBtn").addEventListener("click", update);
+    document.getElementById("resetBtn").addEventListener("click", resetTracker);
+
+    // Enter to update (useful on desktop + mobile keyboards)
+    balanceInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") update();
+    });
 
     // Load saved balance on open
     const saved = localStorage.getItem("balance");
     if (saved !== null) {
-      document.getElementById("balanceInput").value = saved;
+      balanceInput.value = saved;
       update();
     }
   </script>
