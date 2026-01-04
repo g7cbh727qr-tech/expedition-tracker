@@ -317,11 +317,11 @@
 
     // Bar color changes by milestone (same palette vibe)
     function milestoneColor(balance) {
-      if (balance < 1_000_000) return "#55B686";  // green
-      if (balance < 2_000_000) return "#F2C14B";  // gold
+      if (balance < 1_000_000) return "#C44536";  // red
+      if (balance < 2_000_000) return "#E26D5A";  // warm red
       if (balance < 3_000_000) return "#F29E4C";  // orange
-      if (balance < 4_000_000) return "#E26D5A";  // warm red
-      return "#C44536";                           // final push red
+      if (balance < 4_000_000) return "#F2C14B";  // gold
+      return "#55B686";                           // green
     }
 
     function nextMillionAmount(balance) {
