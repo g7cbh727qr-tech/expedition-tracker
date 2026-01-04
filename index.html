@@ -31,6 +31,29 @@
     .remaining {
   color: #E26D5A; /* warm red from same palette */
 }
+
+    /* Progress milestones */
+.milestones {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.milestone {
+  position: absolute;
+  top: -6px;
+  width: 2px;
+  height: 26px;
+  background: rgba(148,163,184,.45);
+}
+
+.milestoneLabel {
+  position: absolute;
+  top: 22px;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: #94a3b8;
+}
     
     * { box-sizing: border-box; }
     body {
@@ -222,12 +245,26 @@
           <div style="font-weight:650;">Progress</div>
           <div class="pct" id="progressPct">0%</div>
         </div>
-        <div class="barTrack" aria-label="Progress toward goal">
-          <div class="barFill" id="barFill"></div>
+        <div class="barTrack" aria-label="Progress toward goal" style="position: relative;">
+  <div class="barFill" id="barFill"></div>
+
+  <div class="milestones">
+    <div class="milestone" style="left:20%"></div>
+    <div class="milestone" style="left:40%"></div>
+    <div class="milestone" style="left:60%"></div>
+    <div class="milestone" style="left:80%"></div>
+
+    <div class="milestoneLabel" style="left:20%">1M</div>
+    <div class="milestoneLabel" style="left:40%">2M</div>
+    <div class="milestoneLabel" style="left:60%">3M</div>
+    <div class="milestoneLabel" style="left:80%">4M</div>
+  </div>
+</div>
         </div>
         <div class="progressFoot">
           <div id="progressDollars">$0.00 of $5,000,000.00</div>
           <div id="progressRemaining">Remaining: $0.00</div>
+<div id="nextMillion">To next $1M: $0.00</div>
         </div>
       </div>
 
@@ -288,6 +325,11 @@
       const remaining = GOAL - balance;
       progressDollars.textContent = `${formatCurrency(balance)} of ${formatCurrency(GOAL)}`;
       progressRemaining.textContent = `Remaining: ${formatCurrency(Math.max(0, remaining))}`;
+      const toNext = nextMillionAmount(balance);
+document.getElementById("nextMillion").textContent =
+  balance >= GOAL
+    ? "All milestones cleared 🎉"
+    : `To next $1M: ${formatCurrency(toNext)}`;
     }
 
     function update() {
@@ -332,6 +374,12 @@
       barFill.style.width = "0%";
       progressPct.textContent = "0%";
     }
+
+    function nextMillionAmount(balance) {
+  if (balance >= GOAL) return 0;
+  const nextMilestone = Math.ceil(balance / 1_000_000) * 1_000_000;
+  return Math.max(0, nextMilestone - balance);
+}
 
     // Buttons
     document.getElementById("updateBtn").addEventListener("click", update);
